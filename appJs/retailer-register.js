@@ -7,7 +7,6 @@ registerform.addEventListener('submit', function (event) {
     let addressField = document.getElementById("address");
 
     let stateField = document.getElementById("state");
-    let pinField = document.getElementById("pin");
     let GSTField = document.getElementById("gst");
     let emailField = document.getElementById("email");
     let passwordField = document.getElementById("confirm password");
@@ -16,12 +15,11 @@ registerform.addEventListener('submit', function (event) {
     let mobilephone = mobilephoneField.value;
     let address = addressField.value;
     let state = stateField.value;
-    let pin = pinField.value;
     let gst = GSTField.value;
     let email = emailField.value;
     let password = passwordField.value;
 
-    if(mobilephone.length == 10 && gst.length == 15){
+    if(mobilephone.length == 10 && gst.length == 15 && checkGST(gst)){
         buttonField.innerHTML = "Registering...";
         buttonField.disabled = true;
     
@@ -34,7 +32,6 @@ registerform.addEventListener('submit', function (event) {
                     name: name,
                     phone: mobilephone,
                     state: state,
-                    pin: pin,
                     GST_number: gst,
                     email: email
                 }).
@@ -42,7 +39,9 @@ registerform.addEventListener('submit', function (event) {
                         buttonField.innerHTML = "Register";
                         buttonField.disabled = false;
                         //redirect to retailer home page
-                        window.location = "retailerHome.html"
+
+                        window.open("retailerHome.html", "_blank")
+                window.open('', '_self').close()
     
                     })
                     .catch((error) => {
@@ -66,12 +65,23 @@ registerform.addEventListener('submit', function (event) {
             mobilephoneField.focus();
         alert("Please Enter 10 Digits In Your Phone Number")
         }
-        else{
+        else if(gst.length != 15){
             GSTField.focus();
             alert("Please Enter 15 Characters In Your GST Number")
         }
+        
         
     }
     
 
 })
+
+function checkGST(inputvalues) {
+
+    var gstinformat = new RegExp('^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$');
+    if (gstinformat.test(inputvalues)) {
+        return true;
+    } else {
+        alert('Please Enter Valid GSTIN Number');
+    }
+}
